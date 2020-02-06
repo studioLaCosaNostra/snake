@@ -10,7 +10,7 @@ use direction::Direction;
 use snake::Snake;
 
 use stdweb::traits::*;
-use stdweb::web::{window, document, event::KeyDownEvent, event::ResizeEvent, IEventTarget};
+use stdweb::web::{window, document, set_timeout, event::KeyDownEvent, event::ResizeEvent, IEventTarget};
 
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -46,7 +46,7 @@ fn main() {
     });
 
     fn game_loop(snake: Rc<RefCell<Snake>>, canvas: Rc<RefCell<Canvas>>, time: u32) {
-        stdweb::web::set_timeout(
+        set_timeout(
             move || {
                 game_loop(snake.clone(), canvas.clone(), time);
                 snake.borrow_mut().update();

@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "cargo web start",
     "gh-pages-publish": "ts-node --project bin/tsconfig.json bin/gh-pages-publish",
     "gh-pages-clean": "gh-pages-clean",
     "deploy": "cargo web deploy --release && npm run gh-pages-publish"
