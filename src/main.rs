@@ -10,7 +10,7 @@ use direction::Direction;
 use snake::Snake;
 
 use stdweb::traits::*;
-use stdweb::web::{event::KeyDownEvent, event::ResizeEvent, IEventTarget};
+use stdweb::web::{window, document, event::KeyDownEvent, event::ResizeEvent, IEventTarget};
 
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -23,7 +23,7 @@ fn main() {
 
     snake.borrow().draw(&canvas.borrow());
 
-    stdweb::web::document().add_event_listener({
+    document().add_event_listener({
         let snake = snake.clone();
         move |event: KeyDownEvent| {
             match event.key().as_ref() {
@@ -36,13 +36,10 @@ fn main() {
         }
     });
 
-    stdweb::web::window().add_event_listener({
+    window().add_event_listener({
         let canvas = canvas.clone();
         let snake = snake.clone();
         move |_: ResizeEvent| {
-          js! {
-            console.log("resize");
-          }
           canvas.borrow_mut().resize();
           snake.borrow().draw(&canvas.borrow());
         }

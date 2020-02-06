@@ -40,9 +40,7 @@ impl Canvas {
     };
     let offset_x = (canvas.width() - max) / 2;
     let offset_y = (canvas.height() - max) / 2;
-    js! {
-      console.log(@{max}, @{canvas.width()}, @{canvas.height()}, @{offset_x});
-    }
+    
     Canvas {
       canvas,
       ctx,
