@@ -1,0 +1,20 @@
+{
+  "name": "snake",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "gh-pages-publish": "ts-node --project bin/tsconfig.json bin/gh-pages-publish",
+    "gh-pages-clean": "gh-pages-clean",
+    "deploy": "cargo web deploy --release && npm run gh-pages-publish"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/gh-pages": "^2.0.1",
+    "@types/node": "^13.7.0",
+    "gh-pages": "^2.2.0",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5"
+  }
+}
