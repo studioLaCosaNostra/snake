@@ -10,7 +10,7 @@ use direction::Direction;
 use snake::Snake;
 
 use stdweb::traits::*;
-use stdweb::web::{event::KeyDownEvent, IEventTarget};
+use stdweb::web::{event::KeyDownEvent, event::ResizeEvent, IEventTarget};
 
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -18,36 +18,48 @@ use std::rc::Rc;
 fn main() {
     stdweb::initialize();
 
-    let canvas = Canvas::new("#canvas", 20, 20);
+    let canvas = Rc::new(RefCell::new(Canvas::new("#canvas", 20, 20)));
     let snake = Rc::new(RefCell::new(Snake::new(20, 20)));
 
-    snake.borrow().draw(&canvas);
+    snake.borrow().draw(&canvas.borrow());
 
     stdweb::web::document().add_event_listener({
         let snake = snake.clone();
         move |event: KeyDownEvent| {
             match event.key().as_ref() {
-                "ArrowLeft" => snake.borrow_mut().change_direction(Direction::Left),
-                "ArrowRight" => snake.borrow_mut().change_direction(Direction::Right),
-                "ArrowDown" => snake.borrow_mut().change_direction(Direction::Down),
-                "ArrowUp" => snake.borrow_mut().change_direction(Direction::Up),
+                "a" => snake.borrow_mut().change_direction(Direction::Left),
+                "d" => snake.borrow_mut().change_direction(Direction::Right),
+                "s" => snake.borrow_mut().change_direction(Direction::Down),
+                "w" => snake.borrow_mut().change_direction(Direction::Up),
                 _ => {}
             };
         }
     });
 
-    fn game_loop(snake: Rc<RefCell<Snake>>, canvas: Rc<Canvas>, time: u32) {
+    stdweb::web::window().add_event_listener({
+        let canvas = canvas.clone();
+        let snake = snake.clone();
+        move |_: ResizeEvent| {
+          js! {
+            console.log("resize");
+          }
+          canvas.borrow_mut().resize();
+          snake.borrow().draw(&canvas.borrow());
+        }
+    });
+
+    fn game_loop(snake: Rc<RefCell<Snake>>, canvas: Rc<RefCell<Canvas>>, time: u32) {
         stdweb::web::set_timeout(
             move || {
                 game_loop(snake.clone(), canvas.clone(), time);
                 snake.borrow_mut().update();
-                snake.borrow().draw(&canvas);
+                snake.borrow().draw(&canvas.borrow());
             },
             time,
         );
     }
 
-    game_loop(snake, Rc::new(canvas), 100);
+    game_loop(snake, canvas, 100);
 
     stdweb::event_loop();
 }

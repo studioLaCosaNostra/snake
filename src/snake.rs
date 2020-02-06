@@ -106,6 +106,7 @@ impl Snake {
 
     pub fn draw(&self, canvas: &Canvas) {
         canvas.clear_all();
+        canvas.draw_board();
         canvas.draw(self.head.0, self.head.1, "green");
         for &Block(x, y) in &self.tail {
             canvas.draw(x, y, "lightgreen ");
