@@ -20,7 +20,6 @@ fn main() {
 
     let canvas = Rc::new(RefCell::new(Canvas::new("#canvas", 20, 20)));
     let snake = Rc::new(RefCell::new(Snake::new(20, 20)));
-
     snake.borrow().draw(&canvas.borrow());
 
     document().add_event_listener({
